@@ -1,0 +1,29 @@
+{
+  "name": "safemate-user-onboarding",
+  "version": "2.0.0",
+  "description": "SafeMate user onboarding Lambda function with Hedera REST API integration",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'No build step needed'",
+    "deploy": "zip -r user-onboarding.zip index.js package.json node_modules"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "crypto": "^1.0.1",
+    "@aws-sdk/client-dynamodb": "^3.0.0",
+    "@aws-sdk/client-kms": "^3.0.0",
+    "@aws-sdk/client-secrets-manager": "^3.0.0",
+    "@aws-sdk/client-sso": "^3.0.0",
+    "@aws-sdk/core": "^3.0.0",
+    "@smithy/util-middleware": "^2.0.0"
+  },
+  "keywords": [
+    "lambda",
+    "aws",
+    "safemate",
+    "onboarding",
+    "hedera"
+  ],
+  "author": "SafeMate Team",
+  "license": "ISC"
+}

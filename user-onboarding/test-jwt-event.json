@@ -1,0 +1,10 @@
+{
+  "httpMethod": "GET",
+  "path": "/onboarding/status",
+  "headers": {
+    "Authorization": "Bearer eyJraWQiOiJDZ2FVc1ZsWnFPSzFieDlpNno1ZDJMaWhyZnBNa1...",
+    "origin": "https://d19a5c2wn4mtdt.cloudfront.net"
+  },
+  "body": null
+}
+

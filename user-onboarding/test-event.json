@@ -1,0 +1,8 @@
+{
+  "httpMethod": "OPTIONS",
+  "headers": {
+    "origin": "https://d19a5c2wn4mtdt.cloudfront.net"
+  },
+  "resource": "/onboarding/status",
+  "path": "/onboarding/status"
+}

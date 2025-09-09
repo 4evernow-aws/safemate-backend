@@ -1,0 +1,29 @@
+{
+  "name": "wallet-manager",
+  "version": "1.0.0",
+  "description": "SafeMate Wallet Manager - Custodial wallet service for Hedera integration",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "zip": "zip -r wallet-manager.zip . -x node_modules/\\* .git/\\* tests/\\* \\*.test.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.859.0",
+    "@aws-sdk/lib-dynamodb": "^3.859.0",
+    "@aws-sdk/client-kms": "^3.859.0",
+    "@hashgraph/sdk": "^2.40.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "keywords": [
+    "hedera",
+    "wallet",
+    "custodial",
+    "blockchain",
+    "aws",
+    "lambda"
+  ],
+  "author": "SafeMate Team",
+  "license": "MIT"
+}

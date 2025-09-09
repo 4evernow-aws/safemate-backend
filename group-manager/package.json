@@ -1,0 +1,26 @@
+{
+  "name": "group-manager",
+  "version": "1.0.0",
+  "description": "SafeMate Group Manager - Collaborative group and shared wallet management service",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "zip": "zip -r group-manager.zip . -x node_modules/\\* .git/\\* tests/\\* \\*.test.js"
+  },
+  "dependencies": {
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "keywords": [
+    "collaboration",
+    "groups",
+    "shared-wallets",
+    "permissions",
+    "aws",
+    "lambda"
+  ],
+  "author": "SafeMate Team",
+  "license": "MIT"
+}

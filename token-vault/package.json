@@ -1,0 +1,24 @@
+{
+  "name": "safemate-token-vault",
+  "version": "1.0.0",
+  "description": "SafeMate Token Vault Lambda Function",
+  "main": "index.js",
+  "scripts": {
+    "build": "zip -r token-vault.zip .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.859.0",
+    "@aws-sdk/lib-dynamodb": "^3.859.0",
+    "@aws-sdk/client-kms": "^3.859.0",
+    "@hashgraph/sdk": "^2.40.0"
+  },
+  "keywords": [
+    "aws",
+    "lambda",
+    "token-vault",
+    "safemate"
+  ],
+  "author": "SafeMate",
+  "license": "ISC"
+} 

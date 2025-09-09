@@ -1,0 +1,5 @@
+{
+  "httpMethod": "POST",
+  "path": "/onboarding/status",
+  "body": "{\"user_id\": \"test-user-123\", \"email\": \"test@example.com\"}"
+}

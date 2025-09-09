@@ -1,0 +1,17 @@
+{
+  "name": "wallet-creator",
+  "version": "1.0.0",
+  "description": "SafeMate wallet creator Lambda function",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@hashgraph/sdk": "^2.40.0",
+    "@aws-sdk/client-dynamodb": "^3.450.0",
+    "@aws-sdk/lib-dynamodb": "^3.450.0"
+  },
+  "keywords": ["hedera", "wallet", "lambda", "aws"],
+  "author": "SafeMate Team",
+  "license": "MIT"
+}

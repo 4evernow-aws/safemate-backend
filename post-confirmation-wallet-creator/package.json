@@ -1,0 +1,25 @@
+{
+  "name": "post-confirmation-wallet-creator",
+  "version": "1.0.0",
+  "description": "Lambda function to automatically create wallets when users confirm their Cognito accounts",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build.js",
+    "deploy": "npm run build && aws lambda update-function-code --function-name default-safemate-post-confirmation-wallet-creator --zip-file fileb://dist/post-confirmation-wundled.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-lambda": "^3.x"
+  },
+  "devDependencies": {
+    "esbuild": "^0.19.0"
+  },
+  "keywords": [
+    "lambda",
+    "cognito",
+    "wallet",
+    "hedera",
+    "safemate"
+  ],
+  "author": "SafeMate Team",
+  "license": "MIT"
+} 

@@ -1,0 +1,32 @@
+{
+  "name": "hedera-service",
+  "version": "1.0.0",
+  "description": "SafeMate Hedera Service - Lightweight blockchain folder storage",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "test:blockchain": "node test-blockchain.js",
+    "zip": "zip -r hedera-service.zip . -x node_modules/\\* .git/\\* tests/\\* \\*.test.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.621.0",
+    "@aws-sdk/lib-dynamodb": "^3.621.0",
+    "@aws-sdk/client-kms": "^3.621.0",
+    "@hashgraph/sdk": "^2.40.0",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "keywords": [
+    "hedera",
+    "hashgraph",
+    "blockchain",
+    "file-service",
+    "folders",
+    "aws"
+  ],
+  "author": "SafeMate Team",
+  "license": "MIT"
+}

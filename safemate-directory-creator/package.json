@@ -1,0 +1,27 @@
+{
+  "name": "safemate-directory-creator",
+  "version": "1.0.0",
+  "description": "SafeMate Directory NFT Creator Service",
+  "main": "index.js",
+  "scripts": {
+    "build": "zip -r safemate-directory-creator.zip . -x '*.git*' 'node_modules/*' '*.zip'",
+    "deploy": "npm run build && aws lambda update-function-code --function-name default-safemate-directory-creator --zip-file fileb://safemate-directory-creator.zip"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.859.0",
+    "@aws-sdk/lib-dynamodb": "^3.859.0",
+    "@aws-sdk/client-kms": "^3.859.0",
+    "@aws-sdk/client-secrets-manager": "^3.859.0",
+    "@hashgraph/sdk": "^2.40.0"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "safemate",
+    "hedera",
+    "nft",
+    "directory",
+    "lambda"
+  ],
+  "author": "SafeMate Team",
+  "license": "MIT"
+} 
