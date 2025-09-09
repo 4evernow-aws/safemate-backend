@@ -1,0 +1,17 @@
+{
+  "environment": "production",
+  "aws": {
+    "region": "ap-southeast-2"
+  },
+  "lambda": {
+    "timeout": 90,
+    "memory": 1024,
+    "logRetention": 30
+  },
+  "dynamodb": {
+    "billingMode": "PAY_PER_REQUEST"
+  },
+  "hedera": {
+    "network": "mainnet"
+  }
+}

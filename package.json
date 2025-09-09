@@ -1,0 +1,26 @@
+{
+  "name": "safemate-backend",
+  "version": "1.0.0",
+  "description": "SafeMate Backend Services - Lambda Functions",
+  "private": true,
+  "workspaces": [
+    "user-onboarding",
+    "token-vault",
+    "hedera-service",
+    "group-manager",
+    "directory-creator",
+    "wallet-manager",
+    "post-confirmation-wallet-creator"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "deploy:dev": "npm run deploy:dev --workspaces",
+    "deploy:preprod": "npm run deploy:preprod --workspaces",
+    "deploy:production": "npm run deploy:production --workspaces",
+    "test": "npm run test --workspaces"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.1692.0",
+    "esbuild": "^0.24.0"
+  }
+}
