@@ -208,6 +208,38 @@ exports.handler = async (event, context) => {
       console.log('✅ Status endpoint called');
       const status = await getOnboardingStatus(userId);
       
+      // If user doesn't have a wallet, automatically create one (treat existing users same as new users)
+      if (!status.hasWallet) {
+        console.log('🔄 No wallet found for existing user, creating one automatically...');
+        const walletResult = await startOnboarding(userId, email);
+        
+        if (walletResult.success) {
+          console.log('✅ Wallet created successfully for existing user');
+          return {
+            statusCode: 200,
+            headers: dynamicCorsHeaders,
+            body: JSON.stringify({
+              hasWallet: true,
+              status: 'completed',
+              message: 'Wallet created automatically for existing user',
+              walletId: walletResult.walletId,
+              createdAt: walletResult.createdAt
+            })
+          };
+        } else {
+          console.log('❌ Failed to create wallet for existing user');
+          return {
+            statusCode: 500,
+            headers: dynamicCorsHeaders,
+            body: JSON.stringify({
+              hasWallet: false,
+              status: 'error',
+              error: 'Failed to create wallet for existing user'
+            })
+          };
+        }
+      }
+      
       return {
         statusCode: 200,
         headers: dynamicCorsHeaders,
