@@ -1,5 +1,15 @@
 {
-  "httpMethod": "POST",
-  "path": "/onboarding/status",
-  "body": "{\"user_id\": \"test-user-123\", \"email\": \"test@example.com\"}"
+  "httpMethod": "GET",
+  "path": "/dev/onboarding/status",
+  "headers": {
+    "origin": "http://localhost:5173"
+  },
+  "requestContext": {
+    "authorizer": {
+      "claims": {
+        "sub": "test-user-123",
+        "email": "test@example.com"
+      }
+    }
+  }
 }

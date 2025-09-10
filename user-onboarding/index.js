@@ -1,3 +1,27 @@
+// =============================================================================
+// SafeMate User Onboarding Lambda Function
+// =============================================================================
+// 
+// This Lambda function handles:
+// - User onboarding status checking
+// - Automatic wallet creation for existing users (same as new users)
+// - Real Hedera testnet wallet generation using @hashgraph/sdk
+// - Secure key storage using AWS KMS and Secrets Manager
+// - Dynamic CORS handling for multiple environments
+// - Full HTTP method support (GET, POST, PUT, DELETE, OPTIONS)
+//
+// Environment: Development (dev)
+// Last Updated: 2025-09-10
+// 
+// Key Features:
+// - Real Hedera testnet wallet creation (not demo wallet)
+// - Automatic wallet creation for existing users on login
+// - Secure private key encryption with KMS
+// - Dynamic CORS origin handling
+// - Comprehensive error handling and logging
+//
+// =============================================================================
+
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { DynamoDBDocumentClient, GetCommand, PutCommand } = require('@aws-sdk/lib-dynamodb');
 const { KMSClient, EncryptCommand, DecryptCommand, GenerateDataKeyCommand } = require('@aws-sdk/client-kms');
