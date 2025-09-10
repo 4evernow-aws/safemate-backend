@@ -66,28 +66,83 @@ async function sendVerificationCode(username) {
   try {
     console.log('📧 Sending verification code to:', username);
     
-    const params = {
-      ClientId: process.env.COGNITO_CLIENT_ID,
+    // First, check if user exists and their status
+    const userParams = {
+      UserPoolId: process.env.USER_POOL_ID,
       Username: username
     };
     
-    const result = await cognitoIdentityServiceProvider.resendConfirmationCode(params).promise();
+    let userResult;
+    try {
+      userResult = await cognitoIdentityServiceProvider.adminGetUser(userParams).promise();
+      console.log('📧 User found, status:', userResult.UserStatus);
+    } catch (userError) {
+      console.error('❌ User not found:', userError);
+      throw new Error('User not found');
+    }
     
-    console.log('✅ Verification code sent successfully');
-    
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type,Authorization',
-        'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS'
-      },
-      body: JSON.stringify({
-        message: 'Verification code sent successfully',
-        destination: result.CodeDeliveryDetails?.Destination || 'email'
-      })
-    };
+    // For existing users, we need to use adminCreateUser with MessageAction = RESEND
+    // This will send a verification code to existing users
+    if (userResult.UserStatus === 'CONFIRMED' || userResult.UserStatus === 'FORCE_CHANGE_PASSWORD') {
+      console.log('📧 Existing user detected, sending verification code via adminCreateUser...');
+      
+      const adminParams = {
+        UserPoolId: process.env.USER_POOL_ID,
+        Username: username,
+        MessageAction: 'RESEND',
+        TemporaryPassword: 'TempPass123!', // This will be ignored since MessageAction is RESEND
+        UserAttributes: [
+          {
+            Name: 'email',
+            Value: username
+          }
+        ]
+      };
+      
+      const result = await cognitoIdentityServiceProvider.adminCreateUser(adminParams).promise();
+      console.log('✅ Verification code sent to existing user successfully');
+      
+      return {
+        statusCode: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+          'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS'
+        },
+        body: JSON.stringify({
+          message: 'Verification code sent successfully to existing user',
+          destination: 'email',
+          userStatus: userResult.UserStatus
+        })
+      };
+    } else {
+      // For unconfirmed users, use resendConfirmationCode
+      console.log('📧 Unconfirmed user detected, using resendConfirmationCode...');
+      
+      const params = {
+        ClientId: process.env.CLIENT_ID,
+        Username: username
+      };
+      
+      const result = await cognitoIdentityServiceProvider.resendConfirmationCode(params).promise();
+      console.log('✅ Verification code sent successfully');
+      
+      return {
+        statusCode: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+          'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS'
+        },
+        body: JSON.stringify({
+          message: 'Verification code sent successfully',
+          destination: result.CodeDeliveryDetails?.Destination || 'email',
+          userStatus: userResult.UserStatus
+        })
+      };
+    }
   } catch (error) {
     console.error('❌ Error sending verification code:', error);
     throw error;
@@ -99,7 +154,7 @@ async function verifyCode(username, confirmationCode) {
     console.log('🔍 Verifying code for user:', username);
     
     const params = {
-      ClientId: process.env.COGNITO_CLIENT_ID,
+      ClientId: process.env.CLIENT_ID,
       Username: username,
       ConfirmationCode: confirmationCode
     };
@@ -131,7 +186,7 @@ async function checkVerificationStatus(username) {
     console.log('🔍 Checking verification status for user:', username);
     
     const params = {
-      UserPoolId: process.env.COGNITO_USER_POOL_ID,
+      UserPoolId: process.env.USER_POOL_ID,
       Username: username
     };
     
