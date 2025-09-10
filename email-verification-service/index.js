@@ -81,68 +81,49 @@ async function sendVerificationCode(username) {
       throw new Error('User not found');
     }
     
-    // For existing users, we need to use adminCreateUser with MessageAction = RESEND
-    // This will send a verification code to existing users
-    if (userResult.UserStatus === 'CONFIRMED' || userResult.UserStatus === 'FORCE_CHANGE_PASSWORD') {
-      console.log('📧 Existing user detected, sending verification code via adminCreateUser...');
+    // For existing confirmed users, temporarily set email_verified to false
+    // This allows us to use resendConfirmationCode (same process as new users)
+    if (userResult.UserStatus === 'CONFIRMED') {
+      console.log('📧 Confirmed user detected, temporarily unverifying email...');
       
-      const adminParams = {
+      // Step 1: Set email_verified to false temporarily
+      const updateParams = {
         UserPoolId: process.env.USER_POOL_ID,
         Username: username,
-        MessageAction: 'RESEND',
-        TemporaryPassword: 'TempPass123!', // This will be ignored since MessageAction is RESEND
         UserAttributes: [
           {
-            Name: 'email',
-            Value: username
+            Name: 'email_verified',
+            Value: 'false'
           }
         ]
       };
       
-      const result = await cognitoIdentityServiceProvider.adminCreateUser(adminParams).promise();
-      console.log('✅ Verification code sent to existing user successfully');
-      
-      return {
-        statusCode: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type,Authorization',
-          'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS'
-        },
-        body: JSON.stringify({
-          message: 'Verification code sent successfully to existing user',
-          destination: 'email',
-          userStatus: userResult.UserStatus
-        })
-      };
-    } else {
-      // For unconfirmed users, use resendConfirmationCode
-      console.log('📧 Unconfirmed user detected, using resendConfirmationCode...');
-      
-      const params = {
-        ClientId: process.env.CLIENT_ID,
-        Username: username
-      };
-      
-      const result = await cognitoIdentityServiceProvider.resendConfirmationCode(params).promise();
-      console.log('✅ Verification code sent successfully');
-      
-      return {
-        statusCode: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type,Authorization',
-          'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS'
-        },
-        body: JSON.stringify({
-          message: 'Verification code sent successfully',
-          destination: result.CodeDeliveryDetails?.Destination || 'email',
-          userStatus: userResult.UserStatus
-        })
-      };
+      await cognitoIdentityServiceProvider.adminUpdateUserAttributes(updateParams).promise();
+      console.log('📧 Temporarily set email_verified to false');
     }
+    
+    // Step 2: Use the same process for all users (new and existing)
+    const params = {
+      ClientId: process.env.CLIENT_ID,
+      Username: username
+    };
+    
+    const result = await cognitoIdentityServiceProvider.resendConfirmationCode(params).promise();
+    console.log('✅ Verification code sent successfully (same process for all users)');
+    
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+        'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS'
+      },
+      body: JSON.stringify({
+        message: 'Verification code sent successfully',
+        destination: result.CodeDeliveryDetails?.Destination || 'email'
+      })
+    };
   } catch (error) {
     console.error('❌ Error sending verification code:', error);
     throw error;
@@ -153,15 +134,16 @@ async function verifyCode(username, confirmationCode) {
   try {
     console.log('🔍 Verifying code for user:', username);
     
+    // Use the same process for both new and existing users
     const params = {
       ClientId: process.env.CLIENT_ID,
       Username: username,
       ConfirmationCode: confirmationCode
     };
     
-    await cognitoIdentityServiceProvider.confirmSignUp(params).promise();
+    const result = await cognitoIdentityServiceProvider.confirmSignUp(params).promise();
     
-    console.log('✅ Email verification successful');
+    console.log('✅ Email verification successful (same process for all users)');
     
     return {
       statusCode: 200,
@@ -198,14 +180,9 @@ async function checkVerificationStatus(username) {
     
     console.log('📧 User verification status:', { emailVerified, userStatus });
     
-    // For existing users, we want to treat them the same as new users
-    // So we'll require verification if:
-    // 1. Email is not verified, OR
-    // 2. User status is UNCONFIRMED, OR
-    // 3. User status is FORCE_CHANGE_PASSWORD (existing users who need to verify)
-    const needsVerification = !emailVerified || 
-                             userStatus === 'UNCONFIRMED' || 
-                             userStatus === 'FORCE_CHANGE_PASSWORD';
+    // Use the same logic for both new and existing users
+    // Require verification if email is not verified or user is unconfirmed
+    const needsVerification = !emailVerified || userStatus === 'UNCONFIRMED';
     
     console.log('📧 User needs verification:', needsVerification);
     
@@ -228,7 +205,6 @@ async function checkVerificationStatus(username) {
     console.error('❌ Error checking verification status:', error);
     
     // If we can't check the status, assume user needs verification to be safe
-    // This ensures existing users are treated the same as new users
     console.log('⚠️ Could not check verification status, assuming user needs verification');
     
     return {
