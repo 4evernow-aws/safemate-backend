@@ -21,15 +21,34 @@ jobs:
       - name: Build Lambda functions
         run: echo "Build completed - using existing deployment package"
       
+      - name: Verify deployment package exists
+        run: |
+          if [ ! -f "user-onboarding/user-onboarding-dev-auto-wallet.zip" ]; then
+            echo "❌ Deployment package not found!"
+            exit 1
+          else
+            echo "✅ Deployment package found"
+            ls -la user-onboarding/user-onboarding-dev-auto-wallet.zip
+          fi
+      
       - name: Deploy to AWS
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-southeast-2
         run: |
+          echo "🚀 Starting deployment..."
+          echo "Branch: ${{ github.ref }}"
+          
           if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
+            echo "📦 Deploying to DEV environment..."
             npm run deploy:dev
           elif [ "${{ github.ref }}" == "refs/heads/preprod" ]; then
+            echo "📦 Deploying to PREPROD environment..."
             npm run deploy:preprod
           else
+            echo "📦 Deploying to PRODUCTION environment..."
             npm run deploy:production
           fi
+          
+          echo "✅ Deployment completed successfully!"
