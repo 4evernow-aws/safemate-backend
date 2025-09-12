@@ -47,16 +47,14 @@ function getCorsHeaders(event) {
   console.log('🔍 CORS Debug - All headers:', JSON.stringify(event?.headers, null, 2));
   
   const allowedOrigins = [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'https://safemate.com',
-    'https://www.safemate.com',
-    'https://d19a5c2wn4mtdt.cloudfront.net',
-    'http://preprod-safemate-static-hosting.s3-website-ap-southeast-2.amazonaws.com'
+    'http://localhost:5173',  // Development
+    'http://localhost:3000',  // Alternative dev port
+    'https://d2xl0r3mv20sy5.cloudfront.net',  // Preprod CloudFront (CORRECT)
+    'http://preprod-safemate-static-hosting.s3-website-ap-southeast-2.amazonaws.com'  // Preprod S3 (fallback)
   ];
   
   // Always allow the CloudFront domain
-  if (origin === 'https://d19a5c2wn4mtdt.cloudfront.net') {
+  if (origin === 'https://d2xl0r3mv20sy5.cloudfront.net') {
     console.log('✅ CORS: Allowing CloudFront origin:', origin);
     return {
       'Content-Type': 'application/json',

@@ -380,7 +380,7 @@ This NFT represents your personal SafeMate directory. It contains:
 ### 2. Key Features
 - **Secure File Storage**: Store files on the Hedera network
 - **Group Management**: Create and manage shared wallets
-- **Token Rewards**: Earn MATE tokens for platform participation
+- **Secure Storage**: Store files securely on Hedera testnet
 - **Decentralized**: Your data, your control
 
 ### 3. Next Steps

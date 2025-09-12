@@ -99,10 +99,9 @@ function createResponse(statusCode, body, event) {
   
   // Define allowed origins
   const allowedOrigins = [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'https://safemate.com',
-    'https://www.safemate.com'
+    'http://localhost:5173',  // Development
+    'http://localhost:3000',  // Alternative dev port
+    'https://d2xl0r3mv20sy5.cloudfront.net'  // Preprod CloudFront
   ];
   
   // Check if origin is allowed
