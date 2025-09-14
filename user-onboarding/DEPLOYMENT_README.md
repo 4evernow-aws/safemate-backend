@@ -15,10 +15,12 @@ This is the final, clean deployment package for the SafeMate User Onboarding Lam
 - Enhanced verification code validation logic
 - Added comprehensive error handling and logging
 
-### 2. Wallet ID Format
-- Fixed wallet ID format to use proper Hedera account IDs (`0.0.XXXXXX`)
-- Updated wallet migration function
-- Ensured compatibility with Hedera mirror node calls
+### 2. Real Hedera Account Creation
+- **IMPLEMENTED**: Real Hedera testnet account creation using @hashgraph/sdk
+- **IMPLEMENTED**: Automatic 0.10 HBAR transfer from operator account to new accounts
+- **IMPLEMENTED**: Real Hedera account IDs (0.0.XXXXXX format) instead of mock IDs
+- **IMPLEMENTED**: Proper Hedera client initialization with operator credentials
+- **IMPLEMENTED**: Account creation with initial balance and transaction tracking
 
 ### 3. Code Quality
 - Removed all duplicate files (15+ duplicate index files removed)
@@ -26,13 +28,15 @@ This is the final, clean deployment package for the SafeMate User Onboarding Lam
 - Clean, maintainable codebase
 
 ## Functions in index.js
-1. `migrateWalletToHederaFormat()` - Migrates existing wallets to Hedera format
-2. `getOnboardingStatus()` - Checks user onboarding status
-3. `startOnboarding()` - Creates new wallets for users
-4. `sendVerificationCode()` - Sends email verification codes
-5. `verifyCode()` - Validates verification codes
-6. `checkVerificationStatus()` - Checks verification status
-7. `exports.handler` - Main Lambda handler
+1. `initializeHederaClient()` - Initializes Hedera client with operator credentials
+2. `createRealHederaAccount()` - Creates real Hedera testnet accounts with 0.10 HBAR
+3. `migrateWalletToHederaFormat()` - Migrates existing wallets to Hedera format
+4. `getOnboardingStatus()` - Checks user onboarding status
+5. `startOnboarding()` - Creates new wallets for users
+6. `sendVerificationCode()` - Sends email verification codes
+7. `verifyCode()` - Validates verification codes
+8. `checkVerificationStatus()` - Checks verification status
+9. `exports.handler` - Main Lambda handler
 
 ## Deployment Instructions
 
@@ -53,11 +57,15 @@ This is the final, clean deployment package for the SafeMate User Onboarding Lam
 - `USER_KEYS_KMS_KEY_ID` - KMS key for encryption
 - `COGNITO_USER_POOL_ID` - Cognito user pool ID
 - `HEDERA_NETWORK` - Hedera network (testnet/mainnet)
+- `HEDERA_OPERATOR_ID` - Hedera testnet operator account ID (e.g., 0.0.123456)
+- `HEDERA_OPERATOR_KEY` - Hedera testnet operator private key
 
 ## Testing Checklist
 - [ ] Email verification sent on first sign-in
 - [ ] Verification code validation works
-- [ ] Wallet IDs are in correct Hedera format (`0.0.XXXXXX`)
+- [ ] **Real Hedera account creation with 0.10 HBAR transfer**
+- [ ] **Wallet IDs are in correct Hedera format (`0.0.XXXXXX`)**
+- [ ] **Operator account credentials configured**
 - [ ] No duplicate functions or files
 - [ ] CORS headers properly configured
 - [ ] Error handling and logging working
@@ -77,10 +85,10 @@ user-onboarding/
 ```
 
 ## Version Information
-- **Last Updated**: 2025-01-15
-- **Status**: Ready for production deployment
+- **Last Updated**: 2025-09-14
+- **Status**: Ready for production deployment with real Hedera integration
 - **Free Tier Compliant**: Yes (no Secrets Manager usage)
-- **Hedera Integration**: Real testnet integration
+- **Hedera Integration**: Real testnet integration with 0.10 HBAR transfers
 
 ---
 **Note**: This package has been thoroughly cleaned of all duplicate files and functions. The codebase is now maintainable and ready for deployment.
