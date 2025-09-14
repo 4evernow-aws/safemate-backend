@@ -3,15 +3,36 @@
   "version": "1.0.0",
   "description": "SafeMate Backend Services - Lambda Functions",
   "private": true,
+  "workspaces": [
+    "user-onboarding",
+    "token-vault",
+    "hedera-service",
+    "group-manager",
+    "safemate-directory-creator",
+    "wallet-manager",
+    "post-confirmation-wallet-creator",
+    "email-verification-service",
+    "wallet-creator",
+    "consolidated-wallet-service",
+    "ultimate-wallet-service"
+  ],
   "scripts": {
-    "build": "echo 'Build completed - using existing deployment package'",
-    "deploy:dev": "echo 'Deploying to dev environment...' && aws lambda update-function-code --function-name dev-safemate-user-onboarding --zip-file fileb://user-onboarding/user-onboarding-dev-auto-wallet.zip",
-    "deploy:preprod": "echo 'Deploying to preprod environment...' && aws lambda update-function-code --function-name preprod-safemate-user-onboarding --zip-file fileb://user-onboarding/user-onboarding-dev-auto-wallet.zip",
-    "deploy:production": "echo 'Deploying to production environment...' && aws lambda update-function-code --function-name prod-safemate-user-onboarding --zip-file fileb://user-onboarding/user-onboarding-dev-auto-wallet.zip",
-    "test": "echo 'No tests configured'"
+    "dev": "echo '🚀 Starting SafeMate Backend Development Mode...' && echo '📦 Installing dependencies...' && npm install && echo '✅ Development environment ready!' && echo '💡 Available commands:' && echo '   npm run build - Build all services' && echo '   npm run deploy:dev - Deploy to development' && echo '   npm run test - Run tests'",
+    "build": "echo '🔨 Building SafeMate Backend Services...' && npm run build --workspaces --if-present",
+    "build:user-onboarding": "cd user-onboarding && npm run build",
+    "build:hedera-service": "cd hedera-service && npm run build --if-present",
+    "build:token-vault": "cd token-vault && npm run build --if-present",
+    "deploy:dev": "npm run deploy:dev --workspaces --if-present",
+    "deploy:preprod": "npm run deploy:preprod --workspaces --if-present",
+    "deploy:production": "npm run deploy:production --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "install:all": "npm install && npm install --workspaces",
+    "clean": "echo '🧹 Cleaning up...' && npm run clean --workspaces --if-present"
   },
   "devDependencies": {
-    "aws-sdk": "^2.1692.0",
-    "esbuild": "^0.24.0"
+    "@aws-sdk/client-lambda": "^3.859.0",
+    "esbuild": "^0.25.9",
+    "serverless": "^4.18.2",
+    "serverless-offline": "^14.4.0"
   }
 }

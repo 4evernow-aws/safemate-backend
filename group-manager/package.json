@@ -8,6 +8,9 @@
     "zip": "zip -r group-manager.zip . -x node_modules/\\* .git/\\* tests/\\* \\*.test.js"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.859.0",
+    "@aws-sdk/lib-dynamodb": "^3.859.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.859.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {

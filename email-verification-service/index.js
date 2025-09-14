@@ -25,8 +25,10 @@
 //
 // =============================================================================
 
-const AWS = require('aws-sdk');
-const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
+const { CognitoIdentityProviderClient, AdminGetUserCommand, AdminUpdateUserAttributesCommand, ResendConfirmationCodeCommand, ConfirmSignUpCommand } = require('@aws-sdk/client-cognito-identity-provider');
+
+// Initialize Cognito client
+const cognitoClient = new CognitoIdentityProviderClient({ region: 'ap-southeast-2' });
 
 exports.handler = async (event) => {
   console.log('📧 Email verification service triggered:', JSON.stringify(event, null, 2));
@@ -67,14 +69,14 @@ async function sendVerificationCode(username) {
     console.log('📧 Sending verification code to:', username);
     
     // First, check if user exists and their status
-    const userParams = {
+    const getUserCommand = new AdminGetUserCommand({
       UserPoolId: process.env.USER_POOL_ID,
       Username: username
-    };
+    });
     
     let userResult;
     try {
-      userResult = await cognitoIdentityServiceProvider.adminGetUser(userParams).promise();
+      userResult = await cognitoClient.send(getUserCommand);
       console.log('📧 User found, status:', userResult.UserStatus);
     } catch (userError) {
       console.error('❌ User not found:', userError);
@@ -87,7 +89,7 @@ async function sendVerificationCode(username) {
       console.log('📧 Confirmed user detected, temporarily unverifying email...');
       
       // Step 1: Set email_verified to false temporarily
-      const updateParams = {
+      const updateCommand = new AdminUpdateUserAttributesCommand({
         UserPoolId: process.env.USER_POOL_ID,
         Username: username,
         UserAttributes: [
@@ -96,19 +98,19 @@ async function sendVerificationCode(username) {
             Value: 'false'
           }
         ]
-      };
+      });
       
-      await cognitoIdentityServiceProvider.adminUpdateUserAttributes(updateParams).promise();
+      await cognitoClient.send(updateCommand);
       console.log('📧 Temporarily set email_verified to false');
     }
     
     // Step 2: Use the same process for all users (new and existing)
-    const params = {
+    const resendCommand = new ResendConfirmationCodeCommand({
       ClientId: process.env.CLIENT_ID,
       Username: username
-    };
+    });
     
-    const result = await cognitoIdentityServiceProvider.resendConfirmationCode(params).promise();
+    const result = await cognitoClient.send(resendCommand);
     console.log('✅ Verification code sent successfully (same process for all users)');
     
     return {
@@ -135,13 +137,13 @@ async function verifyCode(username, confirmationCode) {
     console.log('🔍 Verifying code for user:', username);
     
     // Use the same process for both new and existing users
-    const params = {
+    const confirmCommand = new ConfirmSignUpCommand({
       ClientId: process.env.CLIENT_ID,
       Username: username,
       ConfirmationCode: confirmationCode
-    };
+    });
     
-    const result = await cognitoIdentityServiceProvider.confirmSignUp(params).promise();
+    const result = await cognitoClient.send(confirmCommand);
     
     console.log('✅ Email verification successful (same process for all users)');
     
@@ -167,12 +169,12 @@ async function checkVerificationStatus(username) {
   try {
     console.log('🔍 Checking verification status for user:', username);
     
-    const params = {
+    const getUserCommand = new AdminGetUserCommand({
       UserPoolId: process.env.USER_POOL_ID,
       Username: username
-    };
+    });
     
-    const result = await cognitoIdentityServiceProvider.adminGetUser(params).promise();
+    const result = await cognitoClient.send(getUserCommand);
     
     // Check if email is verified
     const emailVerified = result.UserAttributes?.find(attr => attr.Name === 'email_verified')?.Value === 'true';

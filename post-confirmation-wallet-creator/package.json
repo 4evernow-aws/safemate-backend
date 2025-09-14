@@ -8,10 +8,10 @@
     "deploy": "npm run build && aws lambda update-function-code --function-name default-safemate-post-confirmation-wallet-creator --zip-file fileb://dist/post-confirmation-wundled.js"
   },
   "dependencies": {
-    "@aws-sdk/client-lambda": "^3.x"
+    "@aws-sdk/client-lambda": "^3.859.0"
   },
   "devDependencies": {
-    "esbuild": "^0.19.0"
+    "esbuild": "^0.25.9"
   },
   "keywords": [
     "lambda",
@@ -22,4 +22,4 @@
   ],
   "author": "SafeMate Team",
   "license": "MIT"
-} 
+}

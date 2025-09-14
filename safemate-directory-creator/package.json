@@ -11,8 +11,7 @@
     "@aws-sdk/client-dynamodb": "^3.859.0",
     "@aws-sdk/lib-dynamodb": "^3.859.0",
     "@aws-sdk/client-kms": "^3.859.0",
-    "@aws-sdk/client-secrets-manager": "^3.859.0",
-    "@hashgraph/sdk": "^2.40.0"
+    "@hashgraph/sdk": "^2.71.1"
   },
   "devDependencies": {},
   "keywords": [
