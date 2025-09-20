@@ -37,6 +37,8 @@
 // - GET/POST /onboarding/status - Check user onboarding status (with auto-migration)
 // - POST /onboarding/start - Start onboarding process
 // - POST /onboarding/verify - Email verification (send, verify, check status)
+// - POST /onboarding/send-verification - Send verification code (for confirmed users)
+// - POST /onboarding/verify-code - Verify confirmation code (for confirmed users)
 //
 // =============================================================================
 
@@ -765,6 +767,96 @@ exports.handler = async (event, context) => {
         headers: dynamicCorsHeaders,
         body: JSON.stringify(result)
       };
+    }
+    
+    // Handle send verification endpoint (for confirmed users)
+    if (httpMethod === 'POST' && endpoint === 'send-verification') {
+      console.log('📧 Send verification endpoint called');
+      
+      try {
+        let requestBody = {};
+        if (body) {
+          try {
+            requestBody = JSON.parse(body);
+          } catch (parseError) {
+            console.error('❌ JSON parse error:', parseError, 'Body:', body);
+            return {
+              statusCode: 400,
+              headers: dynamicCorsHeaders,
+              body: JSON.stringify({ error: 'Invalid JSON in request body' })
+            };
+          }
+        }
+        const { username } = requestBody;
+        
+        if (!username) {
+          return {
+            statusCode: 400,
+            headers: dynamicCorsHeaders,
+            body: JSON.stringify({ error: 'Username is required' })
+          };
+        }
+        
+        const result = await sendVerificationCode(username);
+        
+        return {
+          statusCode: 200,
+          headers: dynamicCorsHeaders,
+          body: JSON.stringify(result)
+        };
+      } catch (error) {
+        console.error('❌ Send verification error:', error);
+        return {
+          statusCode: 500,
+          headers: dynamicCorsHeaders,
+          body: JSON.stringify({ error: error.message || 'Internal server error' })
+        };
+      }
+    }
+    
+    // Handle verify code endpoint (for confirmed users)
+    if (httpMethod === 'POST' && endpoint === 'verify-code') {
+      console.log('🔍 Verify code endpoint called');
+      
+      try {
+        let requestBody = {};
+        if (body) {
+          try {
+            requestBody = JSON.parse(body);
+          } catch (parseError) {
+            console.error('❌ JSON parse error:', parseError, 'Body:', body);
+            return {
+              statusCode: 400,
+              headers: dynamicCorsHeaders,
+              body: JSON.stringify({ error: 'Invalid JSON in request body' })
+            };
+          }
+        }
+        const { username, confirmationCode } = requestBody;
+        
+        if (!username || !confirmationCode) {
+          return {
+            statusCode: 400,
+            headers: dynamicCorsHeaders,
+            body: JSON.stringify({ error: 'Username and confirmation code are required' })
+          };
+        }
+        
+        const result = await verifyCode(username, confirmationCode);
+        
+        return {
+          statusCode: 200,
+          headers: dynamicCorsHeaders,
+          body: JSON.stringify(result)
+        };
+      } catch (error) {
+        console.error('❌ Verify code error:', error);
+        return {
+          statusCode: 500,
+          headers: dynamicCorsHeaders,
+          body: JSON.stringify({ error: error.message || 'Internal server error' })
+        };
+      }
     }
     
     // Handle email verification endpoints

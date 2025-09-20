@@ -1,0 +1,21 @@
+{
+  "_comment": "SafeMate Hedera Service - Preprod Environment Configuration",
+  "_description": "Environment variables for preprod-safemate-hedera-service Lambda function",
+  "_last_updated": "2025-09-14",
+  "_status": "Active - Working configuration",
+  "_environment": "preprod",
+  "_notes": [
+    "Hedera operator credentials configured for testnet",
+    "All AWS resources use preprod naming convention",
+    "CORS configured for multiple origins",
+    "AWS SDK v3 compliant"
+  ],
+  "Variables": {
+    "HEDERA_NETWORK": "testnet",
+    "STAGE": "preprod",
+    "HEDERA_FOLDERS_TABLE": "preprod-safemate-hedera-folders",
+    "HEDERA_OPERATOR_ID": "0.0.6428427",
+    "HEDERA_OPERATOR_KEY": "302e020100300506032b657004220420a74b2a24706db9034445e6e03a0f3fd7a82a926f6c4a95bc5de9a720d453f9f9",
+    "WALLET_KEYS_TABLE": "preprod-safemate-wallet-keys"
+  }
+}

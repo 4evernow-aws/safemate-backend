@@ -1,0 +1,25 @@
+{
+  "name": "safemate-user-onboarding-simple",
+  "version": "2.0.0",
+  "description": "SafeMate user onboarding Lambda function - Simplified version without Hedera dependencies",
+  "main": "index-simple.js",
+  "scripts": {
+    "build": "echo 'No build step needed'",
+    "deploy": "zip -r user-onboarding-simple.zip index-simple.js package-simple.json"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.859.0",
+    "@aws-sdk/client-dynamodb": "^3.859.0",
+    "@aws-sdk/client-kms": "^3.859.0",
+    "@aws-sdk/lib-dynamodb": "^3.859.0"
+  },
+  "keywords": [
+    "lambda",
+    "aws",
+    "safemate",
+    "onboarding",
+    "simplified"
+  ],
+  "author": "SafeMate Team",
+  "license": "ISC"
+}

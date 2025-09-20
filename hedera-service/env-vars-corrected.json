@@ -1,0 +1,10 @@
+{
+  "Variables": {
+    "HEDERA_NETWORK": "testnet",
+    "STAGE": "preprod",
+    "HEDERA_FOLDERS_TABLE": "preprod-safemate-hedera-folders",
+    "HEDERA_OPERATOR_ID": "0.0.6428427",
+    "HEDERA_OPERATOR_KEY": "302e020100300506032b657004220420a74b2a24706db9034445e6e03a0f3fd7a82a926f6c4a95bc5de9a720d453f9f9",
+    "WALLET_KEYS_TABLE": "preprod-safemate-wallet-keys"
+  }
+}

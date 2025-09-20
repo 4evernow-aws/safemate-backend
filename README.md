@@ -169,6 +169,25 @@ Each branch automatically deploys to its corresponding environment:
 - `hedera-service.zip` - Hedera blockchain service
 - `email-verification-service.zip` - Email verification service
 
+## Deployment Status
+
+### ✅ **Preprod Environment - ACTIVE**
+- **Hedera Service**: ✅ Working - Testnet integration confirmed
+- **Token Vault Service**: ✅ Working - Input validation and CORS configured
+- **Email Verification Service**: ✅ Working - AWS SDK v3 migrated
+- **User Onboarding Service**: ⚠️ Hedera dependencies issue (non-critical)
+
+### 🚀 **Deployment Scripts Available**
+- `deploy-all-services.ps1` - PowerShell deployment script
+- `deploy-services.bat` - Windows batch deployment script
+- `configure-environment-variables.ps1` - Environment variables configuration
+- `DEPLOYMENT_GUIDE.md` - Comprehensive deployment instructions
+
+### 📦 **Deployment Packages Ready**
+- `hedera-service-simple.zip` - Working Hedera service
+- `token-vault.zip` - Token vault service
+- `email-verification-service.zip` - Email verification service
+
 ## Last Updated
 
-2025-01-15 - Added deployment scripts, AWS SDK v3 migration, and comprehensive deployment documentation
+2025-09-14 - Preprod deployment completed, services tested and working, cleanup completed
